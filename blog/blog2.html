@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Mangesh Puri - Blog</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    
+    <link rel="stylesheet" href="../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../css/magnific-popup.css">
+
+    <link rel="stylesheet" href="../css/aos.css">
+
+    <link rel="stylesheet" href="../css/ionicons.min.css">
+
+    <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="../css/flaticon.css">
+    <link rel="stylesheet" href="../css/icomoon.css">
+    <link rel="stylesheet" href="../css/style.css">
+  </head>
+  <body>
+
+	<div id="myClass-page">
+		<a href="#" class="js-myClass-nav-toggle myClass-nav-toggle"><i></i></a>
+		<aside id="myClass-aside" role="complementary" class="js-fullheight text-center">
+			<h1 id="myClass-logo"><a href="../index.html">MP<span>.</span></a></h1>
+			<nav id="myClass-main-menu" role="navigation">
+				<ul>
+					<li><a href="../index.html">Home</a></li>
+					<li><a href="../resume/index.html">Resume</a></li>
+					<li><a href="../social.html">Social Events</a></li>
+					<li><a href="../tech.html">Technical Achievements</a></li>
+					<li><a href="../about.html">About</a></li>
+					<li><a href="../contact.html">Contact</a></li>
+					
+				</ul>
+			</nav>
+
+			<div class="myClass-footer">
+				<p>
+				We shouldn't sit and let life happen, we need to make it happen.
+				Don't Live, Absorb Life. <i style="color: orangered;" class="icon-heart" aria-hidden="true"></i> 
+				</p>
+				<ul>
+					<li><a href="https://www.facebook.com/13Mangesh/"><i class="icon-facebook"></i></a></li>
+					<li><a href="https://twitter.com/13mangeshpuri"><i class="icon-twitter"></i></a></li>
+					<li><a href="https://www.instagram.com/13_mangesh/"><i class="icon-instagram"></i></a></li>
+					<li><a href="https://www.linkedin.com/in/13mangesh"><i class="icon-linkedin"></i></a></li>
+				</ul>
+			</div>
+		</aside>
+		<div id="myClass-main">
+			<section class="ftco-section">
+	    		<div class="container">
+	    			<div class="row">
+						<div class="ftco-animate col-md-8 offset-md-2">
+							<h1 class="display-2 font-weight-bold">Consistent Hashing</h1>
+							<h2 class="mb-3 mt-5 font-weight-bold">What is Hashing</h2>
+							<p>Hashing is the process of mapping data i.e. key to a hash. 
+                                On a basic level hashing is used to retrieve data quickly mostly in O(1) time. 
+                                The commercial DB holds lots and lots of data and it will be very inefficient to access that data linearly 
+                                as an application could be used by thousands of users at a time. So, in this case the hashing used and a hash 
+                                table is created to hold records and retrieve them with the smallest latency possible. 
+                                But, The problem with this approach is that a hash table must be stored on a server and as it is 
+                                stored on a single server it can be a "Single point of failure" and we tried to store it on multiple 
+                                servers to achieve fault tolerance then the problem of consistency occurs and there is no "Single Point of Truth". 
+                                
+								</p>
+							<p>
+								<img src="../images/hash.png" alt="" class="img-fluid">
+							</p>
+							<p>So to tackle this situation the distributed hashing comes into picture.</p>
+							<h2 class="mb-3 mt-5 font-weight-bold">What is Distributed Hashing</h2>
+							<p>In the distributed hashing, the hashtable is divided and stored and multiple servers each fragment 
+                                of hash table may be replicated 2-3 times to achieve greater fault tolerance. 
+                                So, as there are limited number of records each server holds it can cache it and improve the response time. 
+                                Only if there is cache miss then the request will be sent to the DB server. How to divide the records among 
+                                N servers? The simplest strategy used is HASH mod N, So the records are split among N servers and when user 
+                                request for particular record then it goes through hash function and modulo operation is done to find the server 
+                                on which record is stored.</p>
+							<p>
+								<img src="../images/dhash.png" alt="" class="img-fluid">
+                            </p>
+							<h2 class="mb-3 mt-5 font-weight-bold">Rehashing - Drawback of Distributed Hashing</h2>
+							<p>Consider the scenario when a server failed or a new server is added and value of N changes. 
+                                Then we have to rehash all the keys, the cache of all the servers is no longer useful and we 
+                                have to again store the hash fragments on different servers according to the value of N. 
+                                This will cause the performance degradation.</p>
+							<h2 class="mb-3 mt-5 font-weight-bold">Solution - Consistent Hashing</h2>
+							<p>
+                                Answer to all the above problems is "Consistent Hashing". It is also known as Ring Hashing. 
+                                As shown in figure the keys are hashed and placed on the ring (We use the angle from 0 to 360 to place) 
+                                also the servers also hashed according to id or any other parameter and placed on the ring.
+                                Now, in consistent hashing according to convention clockwise or anti-clockwise the records are 
+                                stored in the next immediate server in that direction. 
+								
+                            </p>
+                            <p>
+								<img src="../images/chash1.PNG" alt="" class="img-fluid">
+                            </p>
+                            <p>
+								<img src="../images/chash2.PNG" alt="" class="img-fluid">
+                            </p>
+							<p>Here distributed hashing is achieved also the drawback of distributed hashing is nullified, How? let's see. 
+                                If a new server, let's say D, is added it will also be placed on ring right before server C. 
+                                Now, some of the keys which were previously stored on server C will be stored on the server D and 
+                                cache of C for only some keys has to be updated. In this way all other nodes remain unaffected. 
+                                So, the performance degradation will not happen. 
+                            </p>
+                            <p>Many systems like Memcached, Redis include support for consistent hashing out of the box.</p>
+							<div class="tag-widget post-tag-container mb-5 mt-5">
+								<div class="tagcloud">
+									<a href="#" class="tag-cloud-link">Consistent Hashing</a>
+									<a href="#" class="tag-cloud-link">Distributed Databases</a>
+									<a href="#" class="tag-cloud-link">System Design</a>
+									<a href="#" class="tag-cloud-link">Hashing</a>
+								</div>
+							</div>
+						   </div>
+					</div>
+	    		</div>
+	    	</section>
+		</div>
+	</div>
+
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.easing.1.3.js"></script>
+  <script src="../js/jquery.waypoints.min.js"></script>
+  <script src="../js/jquery.stellar.min.js"></script>
+  <script src="../js/owl.carousel.min.js"></script>
+  <script src="../js/jquery.magnific-popup.min.js"></script>
+  <script src="../js/aos.js"></script>
+  <script src="../js/jquery.animateNumber.min.js"></script>
+  <script src="../js/bootstrap-datepicker.js"></script>
+  <script src="../js/jquery.timepicker.min.js"></script>
+  <script src="../js/scrollax.min.js"></script>
+  <script src="../https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="../js/google-map.js"></script>
+  <script src="../js/main.js"></script>
+    
+  </body>
+</html>
